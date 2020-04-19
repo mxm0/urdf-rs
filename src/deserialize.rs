@@ -29,6 +29,7 @@ pub enum Geometry {
         size: [f64; 3],
     },
     Cylinder { radius: f64, length: f64 },
+    Capsule { radius: f64, length: f64 },
     Sphere { radius: f64 },
     Mesh {
         filename: String,
@@ -132,9 +133,9 @@ mod urdf_vec3 {
         serializer.serialize_str(&msg)
     }
 
-    pub fn deserialize<'de, D>(deserializer: D) -> Result<[f64; 3], D::Error>
+    pub fn deserialize<'a,D>(deserializer: D) -> Result<[f64; 3], D::Error>
     where
-        D: Deserializer<'de>,
+        D: Deserializer<'a>,
     {
         let s = String::deserialize(deserializer)?;
         let vec = s.split(' ')
@@ -163,9 +164,9 @@ mod urdf_vec4 {
         serializer.serialize_str(&msg)
     }
 
-    pub fn deserialize<'de, D>(deserializer: D) -> Result<[f64; 4], D::Error>
+    pub fn deserialize<'a,D>(deserializer: D) -> Result<[f64; 4], D::Error>
     where
-        D: Deserializer<'de>,
+        D: Deserializer<'a>,
     {
         let s = String::deserialize(deserializer)?;
         let vec = s.split(' ')
@@ -238,6 +239,7 @@ pub enum JointType {
     Fixed,
     Floating,
     Planar,
+    Spherical,
 }
 
 #[derive(Debug, Serialize, Deserialize,Default, Clone)]
